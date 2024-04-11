@@ -1,5 +1,6 @@
 package com.example.buspass;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -13,10 +14,15 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.buspass.databinding.ActivityMainBinding;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.json.JSONObject;
 
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.razorpay.Checkout;
 import com.razorpay.PaymentResultListener;
 
@@ -132,6 +138,26 @@ public class MainActivity extends AppCompatActivity implements PaymentResultList
     public void onPaymentSuccess(String razorpayPaymentID) {
         // Handle successful payment here
         Log.d("Payment Success", "Payment ID: " + razorpayPaymentID);
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        String uid = currentUser.getUid();
+        DatabaseReference userReference = FirebaseDatabase.getInstance().getReference().child("User").child(uid);
+
+        // Update the validity to 30 for the user
+        userReference.child("validity").setValue("30")
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        // Handle success
+                        Toast.makeText(getApplicationContext(), "Validity updated", Toast.LENGTH_LONG).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Handle failure
+                        Toast.makeText(getApplicationContext(), "Failed to update validity", Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 
     @Override

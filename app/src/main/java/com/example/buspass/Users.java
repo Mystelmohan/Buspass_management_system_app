@@ -1,19 +1,17 @@
 package com.example.buspass;
 
 public class Users {
-    String Name,userName,ph,sour,desti;
+    private String Name, userName, ph, sour, desti;
+    private String validity; // Add validity field
 
-    public Users(String name, String userName, String ph,String sour,String desti) {
+    public Users(String name, String userName, String ph, String sour, String desti) {
         this.Name = name;
-
         this.userName = userName;
-
         this.ph = ph;
-        this.sour=sour;
-        this.desti=desti;
+        this.sour = sour;
+        this.desti = desti;
+        this.validity = "0"; // Set validity to 0
     }
-
-
 
     public String getName() {
         return Name;
@@ -23,8 +21,6 @@ public class Users {
         Name = name;
     }
 
-
-
     public String getUserName() {
         return userName;
     }
@@ -32,7 +28,6 @@ public class Users {
     public void setUserName(String userName) {
         this.userName = userName;
     }
-
 
     public String getPh() {
         return ph;
@@ -56,5 +51,13 @@ public class Users {
 
     public void setDesti(String desti) {
         this.desti = desti;
+    }
+
+    public String getValidity() {
+        return validity;
+    }
+
+    public void setValidity(String validity) {
+        this.validity = validity;
     }
 }

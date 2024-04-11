@@ -26,6 +26,7 @@ public class home extends Fragment {
     private TextView idTextView;
     private TextView sourTextView;
     private TextView destiTextView;
+    private TextView validity;
 
 
     public home() {
@@ -45,7 +46,7 @@ public class home extends Fragment {
         sourTextView = view.findViewById(R.id.sourcefromdb);
         destiTextView = view.findViewById(R.id.destinationfromdb);
         idTextView = view.findViewById(R.id.idfromdb);
-
+        validity=view.findViewById(R.id.validityfromdb);
         // Retrieve the current user's UID from Firebase Authentication
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
@@ -64,11 +65,12 @@ public class home extends Fragment {
                         String source = dataSnapshot.child("sour").getValue(String.class);
                         String destination = dataSnapshot.child("desti").getValue(String.class);
                         String id = dataSnapshot.child("name").getValue(String.class);
-
+                        String val=dataSnapshot.child("validity").getValue((String.class));
                         // Set the retrieved values to corresponding TextViews
                         sourTextView.setText(source);
                         destiTextView.setText(destination);
                         idTextView.setText(id);
+                        validity.setText(val+" days");
                     }
                 }
 
