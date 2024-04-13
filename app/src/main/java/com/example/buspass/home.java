@@ -22,6 +22,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+
 public class home extends Fragment {
     private TextView idTextView;
     private TextView sourTextView;
@@ -65,12 +69,32 @@ public class home extends Fragment {
                         String source = dataSnapshot.child("sour").getValue(String.class);
                         String destination = dataSnapshot.child("desti").getValue(String.class);
                         String id = dataSnapshot.child("name").getValue(String.class);
-                        String val=dataSnapshot.child("validity").getValue((String.class));
+                        String purchaseDate = dataSnapshot.child("DateOfPurchase").getValue((String.class));
+                        String currformattedDate = null;
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                            LocalDate currentDate = null;
+                            currentDate = LocalDate.now();
+                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                            currformattedDate = currentDate.format(formatter);
+                        }
+                        DateTimeFormatter formatter = null;
+                        long daysDifference = 0;
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                            formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                            LocalDate date1 = LocalDate.parse(purchaseDate, formatter);
+                            LocalDate date2 = LocalDate.parse(currformattedDate, formatter);
+                            daysDifference = ChronoUnit.DAYS.between(date2, date1);
+                        }
+                        int days = 0;
+                        if(30 - daysDifference > 0) {
+                            days = (int) (30 - daysDifference);
+                        }
+
                         // Set the retrieved values to corresponding TextViews
                         sourTextView.setText(source);
                         destiTextView.setText(destination);
                         idTextView.setText(id);
-                        validity.setText(val+" days");
+                        validity.setText(days + " days");
                     }
                 }
 
