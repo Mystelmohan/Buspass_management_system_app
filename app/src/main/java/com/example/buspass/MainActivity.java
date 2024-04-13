@@ -26,6 +26,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.razorpay.Checkout;
 import com.razorpay.PaymentResultListener;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 public class MainActivity extends AppCompatActivity implements PaymentResultListener {
 
 
@@ -141,9 +144,15 @@ public class MainActivity extends AppCompatActivity implements PaymentResultList
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         String uid = currentUser.getUid();
         DatabaseReference userReference = FirebaseDatabase.getInstance().getReference().child("User").child(uid);
-
+        String formattedDate = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            LocalDate currentDate = null;
+            currentDate = LocalDate.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            formattedDate = currentDate.format(formatter);
+        }
         // Update the validity to 30 for the user
-        userReference.child("validity").setValue("30")
+        userReference.child("DateOfPurchase").setValue(formattedDate)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
