@@ -1,6 +1,7 @@
 package com.example.buspass;
 
 public class Users {
+    private final String date;
     private String Name, userName, ph, sour, desti;
     private String validity; // Add validity field
 
@@ -11,6 +12,7 @@ public class Users {
         this.sour = sour;
         this.desti = desti;
         this.validity = "0"; // Set validity to 0
+        this.date = null;
     }
 
     public String getName() {
